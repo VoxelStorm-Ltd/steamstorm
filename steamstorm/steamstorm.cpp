@@ -304,7 +304,7 @@ void steamstorm::store() const {
 
 #ifdef STEAM
   // Internal functionality only ever useful when built in Steam mode
-	std::string const steamstorm::decode_result(EResult result) const {
+  std::string const steamstorm::decode_result(EResult result) const {
     /// Look up a Steam API result code and return a string describing it
     switch(result) {
     case k_EResultOK:
@@ -494,7 +494,7 @@ void steamstorm::store() const {
     default:
       return "Unknown result";
     }
-	}
+  }
 #endif // STEAM
 
 #ifdef STEAM
