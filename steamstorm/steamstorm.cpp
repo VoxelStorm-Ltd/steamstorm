@@ -1,15 +1,14 @@
 #include "steamstorm.h"
-//#include <chrono>
-//#include <thread>
+#include <chrono>
+#include <thread>
 #include <iostream>
-//#include <typeinfo>
 
 steamstorm::steamstorm()
   #ifdef STEAM
     //: internal_callback_stats(this, &steamstorm::callback_stats)
     // we need to initialise it as NULL because the constructor gets upset with our __stdcall modification, and register manually after
     : internal_callback_stats(NULL, NULL)
-  #endif
+  #endif // STEAM
   {
   /// Default constructor
   //internal_callback_stats.Register(this, &steamstorm::callback_stats);
@@ -130,7 +129,7 @@ void steamstorm::initialise() {
 
     initialised = true;
     std::cout << "SteamStorm: Initialised and ready." << std::endl;
-  #else
+  #else // STEAM
     std::cout << "SteamStorm is disabled - no Steam support in this build." << std::endl;
   #endif // STEAM
 }
@@ -524,7 +523,7 @@ void steamstorm::store() const {
     // TODO
     #ifdef DEBUG_STEAMSTORM
       std::cout << "SteamStorm: DEBUG: Stats received and processed." << std::endl;
-    #endif
+    #endif // DEBUG_STEAMSTORM
     stats_ready = true;
 
     return;   // this explicit return may be needed because of the calling convention nonsense
