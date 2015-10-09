@@ -1,7 +1,9 @@
 #include "steamstorm.h"
-#include <chrono>
-#include <thread>
 #include <iostream>
+#ifdef STEAM
+  #include <chrono>
+  #include <thread>
+#endif // STEAM
 
 steamstorm::steamstorm()
   #ifdef STEAM
