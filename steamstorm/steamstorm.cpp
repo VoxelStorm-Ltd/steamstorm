@@ -146,9 +146,9 @@ void steamstorm::shutdown() {
 
 #ifdef STEAM
   // steam versions of getter functions (splitting it this way saves lots of space)
-  bool steamstorm::get_user_has_app(unsigned int const appid __attribute__((__unused__))) const {
+  bool steamstorm::get_user_has_app(unsigned int const appid_to_check __attribute__((__unused__))) const {
     /// Find out whether a user has the app ID specified - useful for checking DLC etc
-    //return (SteamUser()->UserHasLicenseForApp(internal_user_id, appid) == EUserHasLicenseForAppResult::k_EUserHasLicenseResultHasLicense);
+    //return (SteamUser()->UserHasLicenseForApp(internal_user_id, appid_to_check) == EUserHasLicenseForAppResult::k_EUserHasLicenseResultHasLicense);
     // this requires passing a struct, and as such fails due to the calling convention
     return false;
   }
@@ -420,7 +420,6 @@ void steamstorm::store() const {
       return "an remote call or IPC call failed";
     case k_EResultPasswordUnset:
       return "Password could not be verified as it's unset server side";
-    /*
     case k_EResultExternalAccountUnlinked:
       return "External account (PSN, Facebook...) is not linked to a Steam account";
     case k_EResultPSNTicketInvalid:
@@ -464,9 +463,9 @@ void steamstorm::store() const {
     case k_EResultRequirePasswordReEntry:
       return "The user cannot complete the action until they re-enter their password";
     case k_EResultValueOutOfRange:
-      return "the value entered is outside the acceptable range";
+      return "The value entered is outside the acceptable range";
     case k_EResultUnexpectedError:
-      return "something happened that we didn't expect to ever happen";
+      return "Something happened that we didn't expect to ever happen";
     case k_EResultDisabled:
       return "The requested service has been configured to be unavailable";
     case k_EResultInvalidCEGSubmission:
@@ -482,16 +481,35 @@ void steamstorm::store() const {
     case k_EResultItemDeleted:
       return "The thing we're trying to access has been deleted";
     case k_EResultAccountLoginDeniedThrottle:
-      return "login attempt failed, try to throttle response to possible attacker";
+      return "Login attempt failed, try to throttle response to possible attacker";
     case k_EResultTwoFactorCodeMismatch:
-      return "two factor code mismatch";
+      return "Two factor code mismatch";
     case k_EResultTwoFactorActivationCodeMismatch:
-      return "activation code for two-factor didn't match";
+      return "Activation code for two-factor didn't match";
     case k_EResultAccountAssociatedToMultiplePartners:
-      return "account has been associated with multiple partners";
+      return "Account has been associated with multiple partners";
     case k_EResultNotModified:
-      return "data not modified";
-    */
+      return "Data not modified";
+    case k_EResultNoMobileDevice:
+      return "The account does not have a mobile device associated with it";
+    case k_EResultTimeNotSynced:
+      return "The time presented is out of range or tolerance";
+    case k_EResultSmsCodeFailed:
+      return "SMS code failure (no match, none pending, etc.)";
+    case k_EResultAccountLimitExceeded:
+      return "Too many accounts access this resource";
+    case k_EResultAccountActivityLimitExceeded:
+      return "Too many changes to this account";
+    case k_EResultPhoneActivityLimitExceeded:
+      return "Too many changes to this phone";
+    case k_EResultRefundToWallet:
+      return "Cannot refund to payment method, must use wallet";
+    case k_EResultEmailSendFailure:
+      return "Cannot send an email";
+    case k_EResultNotSettled:
+      return "Can't perform operation till payment has settled";
+    case k_EResultNeedCaptcha:
+      return "Needs to provide a valid captcha";
     default:
       return "Unknown result";
     }
