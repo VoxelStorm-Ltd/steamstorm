@@ -38,7 +38,7 @@ void steamstorm::initialise() {
     // register callbacks
     internal_callback_stats.Register(this, &steamstorm::callback_stats);
 
-    std::cout << "SteamStorm: DEBUG 0: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 0: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
     if(!SteamUser()->BLoggedOn()) {
       std::cout << "SteamStorm: Steam is running but user is not logged in, disabling Steam support for this run." << std::endl;
       return;
@@ -95,13 +95,14 @@ void steamstorm::initialise() {
     #ifdef DEBUG_STEAMSTORM
       std::cout << "SteamStorm: DEBUG: Querying Steam for the latest stats..." << std::endl;
     #endif // DEBUG_STEAMSTORM
-    std::cout << "SteamStorm: DEBUG 1: Requesting stat funds: " << get_statistic<float>("FUNDS") << std::endl;
-    std::cout << "SteamStorm: DEBUG 1: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 1: Requesting stat funds: " << get_statistic<float>("FUNDS") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 1: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
     if(!SteamUserStats()->RequestCurrentStats()) {                              // request an update on the current stats
       std::cout << "SteamStorm: ERROR: Failed to request user stats from Steam API, disabling Steam support this run." << std::endl;
       return;
     }
 
+    /**
     // block synchronously until we've got the stats
     std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> time_next_check(std::chrono::high_resolution_clock::now());
     unsigned int constexpr stats_timeout = 2000;  // milliseconds
@@ -116,18 +117,19 @@ void steamstorm::initialise() {
         return;
       }
     }
+    **/
 
-    std::cout << "SteamStorm: DEBUG 2: Requesting stat funds: " << get_statistic<float>("FUNDS") << std::endl;
-    std::cout << "SteamStorm: DEBUG 2: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 2: Requesting stat funds: " << get_statistic<float>("FUNDS") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 2: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
     //std::this_thread::sleep_for(std::chrono::milliseconds(500));                // wait to make sure we have the data we need (nasty hack!)
     //SteamAPI_RunCallbacks();                                                    // run the callbacks once to process any incoming data
-    std::cout << "SteamStorm: DEBUG 3: Requesting stat funds int:   " << get_statistic<int>("FUNDS") << std::endl;
-    std::cout << "SteamStorm: DEBUG 3: Requesting stat funds float: " << get_statistic<float>("FUNDS") << std::endl;
-    std::cout << "SteamStorm: DEBUG 3: Requesting stat hired int:   " << get_statistic<int>("HIRED") << std::endl;
-    std::cout << "SteamStorm: DEBUG 3: Requesting stat hired float: " << get_statistic<float>("HIRED") << std::endl;
-    std::cout << "SteamStorm: DEBUG 3: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
-    set_statistic("FUNDS", 12.345f);
-    set_statistic("HIRED", 1);
+    ///std::cout << "SteamStorm: DEBUG 3: Requesting stat funds int:   " << get_statistic<int>("FUNDS") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 3: Requesting stat funds float: " << get_statistic<float>("FUNDS") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 3: Requesting stat hired int:   " << get_statistic<int>("HIRED") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 3: Requesting stat hired float: " << get_statistic<float>("HIRED") << std::endl;
+    ///std::cout << "SteamStorm: DEBUG 3: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
+    ///set_statistic("FUNDS", 12.345f);
+    ///set_statistic("HIRED", 1);
 
     initialised = true;
     std::cout << "SteamStorm: Initialised and ready." << std::endl;
