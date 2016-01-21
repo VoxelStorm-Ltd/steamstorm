@@ -69,7 +69,7 @@ private:
 
     STEAM_CALLBACK(steamstorm, callback_stats, UserStatsReceived_t, internal_callback_stats);
     // manually defined version of the above to allow specification of calling convention:
-    //#define STEAM_CALLBACK( thisclass, func, param, var ) CCallback< thisclass, param, false > var; void func( param *pParam )
+    //#define STEAM_CALLBACK(thisclass, func, param, var) CCallback< thisclass, param, false > var; void func(param *pParam)
     //CCallback<steamstorm, UserStatsReceived_t, false> internal_callback_stats;
     //void callback_stats(UserStatsReceived_t *pParam);
     //void __stdcall callback_stats(UserStatsReceived_t *pParam);
