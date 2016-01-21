@@ -433,7 +433,7 @@ void steamstorm::store() const {
     case k_EResultIllegalPassword:
       return "The requested new password is not legal";
     case k_EResultSameAsPreviousValue:
-      return "new value is the same as the old one ( secret question and answer )";
+      return "new value is the same as the old one (secret question and answer)";
     case k_EResultAccountLogonDenied:
       return "account login denied due to 2nd factor authentication failure";
     case k_EResultCannotUseOldPassword:
