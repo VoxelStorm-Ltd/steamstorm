@@ -36,13 +36,13 @@ private:
   #ifdef STEAM
     CSteamID internal_user_id;
 
-    std::atomic_bool stats_ready{false};    // flag for whether stats are ready
+    std::atomic_bool stats_ready{false};                                        // flag for whether stats are ready
   #endif // STEAM
 
 public:
-  bool initialised = false;                 // whether our steam connection is operational
-  uint32_t appid = 0;                       // what Steam tells us this app's ID is
-  std::string username;                     // the currently logged in steam user's name
+  bool initialised = false;                                                     // whether our steam connection is operational
+  uint32_t appid = 0;                                                           // what Steam tells us this app's ID is
+  std::string username;                                                         // the currently logged in steam user's name
 
   steamstorm();
   ~steamstorm();
