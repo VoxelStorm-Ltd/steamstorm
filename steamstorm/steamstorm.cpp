@@ -512,6 +512,14 @@ void steamstorm::store() const {
       return "Can't perform operation till payment has settled";
     case k_EResultNeedCaptcha:
       return "Needs to provide a valid captcha";
+    case k_EResultGSLTDenied:
+      return "A game server login token owned by this token's owner has been banned";
+    case k_EResultGSOwnerDenied:
+      return "Game server owner is denied for other reason (account lock, community ban, vac ban, missing phone)";
+    case k_EResultInvalidItemType:
+      return "The type of thing we were requested to act on is invalid";
+    case k_EResultIPBanned:
+      return "The ip address has been banned from taking this action";
     default:
       return "Unknown result";
     }
