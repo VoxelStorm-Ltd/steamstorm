@@ -44,7 +44,7 @@ void steamstorm::initialise() {
       return;
     }
     appid = SteamUtils()->GetAppID();
-    //internal_user_id = SteamUser()->GetSteamID();                             // cache the user's Steam ID
+    //internal_user_id = SteamUser()->GetSteamID();                               // cache the user's Steam ID
     // the above returns a struct and as such breaks due to calling conventions
     username = SteamFriends()->GetPersonaName();
     // various debugging checks that we don't want to bother with in release
@@ -121,8 +121,8 @@ void steamstorm::initialise() {
 
     ///std::cout << "SteamStorm: DEBUG 2: Requesting stat funds: " << get_statistic<float>("FUNDS") << std::endl;
     ///std::cout << "SteamStorm: DEBUG 2: Requesting hidden state of TAKEOVER: " << SteamUserStats()->GetAchievementDisplayAttribute("TAKEOVER", "hidden") << std::endl;
-    //std::this_thread::sleep_for(std::chrono::milliseconds(500));              // wait to make sure we have the data we need (nasty hack!)
-    //SteamAPI_RunCallbacks();                                                  // run the callbacks once to process any incoming data
+    //std::this_thread::sleep_for(std::chrono::milliseconds(500));                // wait to make sure we have the data we need (nasty hack!)
+    //SteamAPI_RunCallbacks();                                                    // run the callbacks once to process any incoming data
     ///std::cout << "SteamStorm: DEBUG 3: Requesting stat funds int:   " << get_statistic<int>("FUNDS") << std::endl;
     ///std::cout << "SteamStorm: DEBUG 3: Requesting stat funds float: " << get_statistic<float>("FUNDS") << std::endl;
     ///std::cout << "SteamStorm: DEBUG 3: Requesting stat hired int:   " << get_statistic<int>("HIRED") << std::endl;
