@@ -184,7 +184,7 @@ void steamstorm::shutdown() {
   }
 #else
   // dummy placeholder functions when steam is disabled
-  bool steamstorm::get_user_has_app(unsigned int const appid __attribute__((__unused__))) const {
+  bool steamstorm::get_user_has_app(unsigned int const appid_to_check __attribute__((__unused__))) const {
     return false;
   }
   bool steamstorm::get_achievement(std::string const &achievementname __attribute__((__unused__))) const {

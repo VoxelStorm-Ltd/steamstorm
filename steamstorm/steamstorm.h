@@ -26,6 +26,9 @@
   #include "opensteamworks/SteamClient.h"
   */
   #pragma GCC diagnostic pop
+  #define CONST_IF_NO_STEAM
+#else
+  #define CONST_IF_NO_STEAM __attribute__((__const__))
 #endif // STEAM
 
 /// Define STEAM to enable steam support; without it all functionality here is noop.
@@ -48,20 +51,20 @@ public:
   ~steamstorm();
 
   void initialise();
-  void shutdown();
+  void shutdown() CONST_IF_NO_STEAM;
 
   // queries
-  bool              get_user_has_app(unsigned int const appid) const;
-  bool              get_achievement(            std::string const &achievementname) const;
-  std::string const get_achievement_name(       std::string const &achievementname) const;
-  std::string const get_achievement_description(std::string const &achievementname) const;
-  bool              get_achievement_hidden(     std::string const &achievementname) const;
-  template <typename T> T get_statistic(        std::string const &statname)        const;
+  bool              get_user_has_app(unsigned int const appid) const CONST_IF_NO_STEAM;
+  bool              get_achievement(            std::string const &achievementname) const CONST_IF_NO_STEAM;
+  std::string const get_achievement_name(       std::string const &achievementname) const CONST_IF_NO_STEAM;
+  std::string const get_achievement_description(std::string const &achievementname) const CONST_IF_NO_STEAM;
+  bool              get_achievement_hidden(     std::string const &achievementname) const CONST_IF_NO_STEAM;
+  template <typename T> T get_statistic(        std::string const &statname)        const CONST_IF_NO_STEAM;
 
   // updating stats and achievements
-  void set_achievement(std::string const &achievementname) const;
-  template <typename T> void set_statistic(std::string const &statname, T const statvalue) const;
-  void store() const;
+  void set_achievement(std::string const &achievementname) const CONST_IF_NO_STEAM;
+  template <typename T> void set_statistic(std::string const &statname, T const statvalue) const CONST_IF_NO_STEAM;
+  void store() const CONST_IF_NO_STEAM;
 
 private:
   #ifdef STEAM
