@@ -14,7 +14,7 @@
     #undef virtual
     #define virtual virtual __thiscall
   #endif // _WIN32
-  #include "steam/steam_api.h"
+  #include <steam/steam_api.h>
   #ifdef _WIN32
     #pragma pop_macro("virtual")
   #endif // _WIN32
