@@ -1,8 +1,3 @@
-    //void callback_stats(UserStatsReceived_t *pParam) __attribute__((__stdcall__));
-  #endif // STEAM
-};
-
-#endif // STEAMSTORM_H_INCLUDED
 #ifndef STEAMSTORM_H_INCLUDED
 #define STEAMSTORM_H_INCLUDED
 
