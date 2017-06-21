@@ -96,7 +96,7 @@ void steamstorm::init() {
         {
           std::ofstream appid_file("steam_appid.txt", std::ios::trunc);
           if(!appid_file.fail() && appid_file.is_open() && appid_file.good()) {
-            appid_file << std::to_string(appid) << '\n';                          // don't use locale-dependent conversion, and use fixed newline char
+            appid_file << std::to_string(appid) << '\n';                        // don't use locale-dependent conversion, and use fixed newline char
             #ifdef DEBUG_STEAMSTORM
               std::cout << "SteamStorm: Successfully wrote appid file" << std::endl;
             #endif // DEBUG_STEAMSTORM
