@@ -59,15 +59,21 @@ void steamstorm::init() {
   std::cout << "SteamStorm: Initialising..." << std::endl;
   try {
     // dynamic library load
-    #ifdef PLATFORM_WINDOWS
+    #if defined(PLATFORM_WINDOWS)
+      #
       lib = load_dynamic({"./steam_api.dll", "steam_api.dll"});
-    #else
+      lib = load_dynamic({"./steam_api.dll", "steam_api.dll"});
+    #elif defined(PLATFORM_LINUX)
       #ifdef NDEBUG
         lib = load_dynamic({"./libsteam_api.so", "libsteam_api.so"});
       #else
         lib = load_dynamic({"./libsteam_api.so.dbg", "libsteam_api.so.dbg", "./libsteam_api.so", "libsteam_api.so"});
       #endif // NDEBUG
-    #endif // PLATFORM_WINDOWS
+    #elif defined(PLATFORM_MACOS)
+      lib = load_dynamic({"./libsteam_api.dylib", "libsteam_api.dylib"});
+    #else
+      #error ""
+    #endif
     if(!lib) {
       std::cout << "SteamStorm: No Steam dynamic library found, not initialising." << std::endl;
       shutdown();
