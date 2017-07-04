@@ -134,6 +134,9 @@ public:
 
   // actions
   void open_url_in_overlay(std::string const &url) const;
+  void open_store_in_overlay(uint32_t appid = 0) const;
+  void open_store_in_overlay_and_add_to_basket(uint32_t appid = 0) const;
+  void open_store_in_overlay_and_add_to_basket_and_show(uint32_t appid = 0) const;
 
   // updating stats and achievements
   void set_achievement(std::string const &achievementname) const;

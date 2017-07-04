@@ -59,15 +59,31 @@ void steamstorm::init() {
   std::cout << "SteamStorm: Initialising..." << std::endl;
   try {
     // dynamic library load
-    #ifdef PLATFORM_WINDOWS
-      lib = load_dynamic({"./steam_api.dll", "steam_api.dll"});
-    #else
-      #ifdef NDEBUG
-        lib = load_dynamic({"./libsteam_api.so", "libsteam_api.so"});
+    #if defined(PLATFORM_WINDOWS)
+      #ifdef PLATFORM_64BIT
+        lib = load_dynamic({"./steam_api64.dll", "steam_api64.dll", "./steam_api.dll", "steam_api.dll"});
       #else
-        lib = load_dynamic({"./libsteam_api.so.dbg", "libsteam_api.so.dbg", "./libsteam_api.so", "libsteam_api.so"});
-      #endif // NDEBUG
-    #endif // PLATFORM_WINDOWS
+        lib = load_dynamic({"./steam_api.dll", "steam_api.dll"});
+      #endif // PLATFORM_64BIT
+    #elif defined(PLATFORM_LINUX)
+      #ifdef PLATFORM_64BIT
+        #ifdef NDEBUG
+          lib = load_dynamic({"./libsteam_api.so", "libsteam_api.so"});
+        #else
+          lib = load_dynamic({"./libsteam_api.so.dbg", "libsteam_api.so.dbg", "./libsteam_api.so", "libsteam_api.so"});
+        #endif // NDEBUG
+      #else
+        #ifdef NDEBUG
+          lib = load_dynamic({"./libsteam_api32.so", "libsteam_api32.so", "./libsteam_api.so", "libsteam_api.so"});
+        #else
+          lib = load_dynamic({"./libsteam_api32.so.dbg", "libsteam_api32.so.dbg", "./libsteam_api32.so", "libsteam_api32.so", "./libsteam_api.so.dbg", "libsteam_api.so.dbg", "./libsteam_api.so", "libsteam_api.so"});
+        #endif // NDEBUG
+      #endif // PLATFORM_64BIT
+    #elif defined(PLATFORM_MACOS)
+      lib = load_dynamic({"./libsteam_api.dylib", "libsteam_api.dylib"});
+    #else
+      #error "platform_defines.h must be included!"
+    #endif
     if(!lib) {
       std::cout << "SteamStorm: No Steam dynamic library found, not initialising." << std::endl;
       shutdown();
@@ -479,6 +495,7 @@ std::string steamstorm::get_last_api_failure(SteamAPICall_t callback) const {
 }
 
 void steamstorm::open_url_in_overlay(std::string const &url) const {
+  /// Open the given URL in the Steam overlay
   if(!enabled) {
     return;                                                                     // exit silently if the api isn't initialised
   }
@@ -486,6 +503,36 @@ void steamstorm::open_url_in_overlay(std::string const &url) const {
     std::cout << "SteamStorm: DEBUG: Opening Steam overlay to url \"" << url << std::endl;
   #endif // DEBUG_STEAMSTORM
   api_friends->ActivateGameOverlayToWebPage(url.c_str());
+}
+void steamstorm::open_store_in_overlay(uint32_t this_appid) const {
+  /// Open the specified app's store in the Steam overlay, or this app's store if none specified
+  if(this_appid == 0) {
+    this_appid = appid;
+  }
+  if(this_appid == 0) {
+    return;
+  }
+  api_friends->ActivateGameOverlayToStore(this_appid, k_EOverlayToStoreFlag_None);
+}
+void steamstorm::open_store_in_overlay_and_add_to_basket(uint32_t this_appid) const {
+  /// Open the specified app's store in the Steam overlay, and add it to the basket at the same time - use this app's store if none specified
+  if(this_appid == 0) {
+    this_appid = appid;
+  }
+  if(this_appid == 0) {
+    return;
+  }
+  api_friends->ActivateGameOverlayToStore(this_appid, k_EOverlayToStoreFlag_AddToCart);
+}
+void steamstorm::open_store_in_overlay_and_add_to_basket_and_show(uint32_t this_appid) const {
+  /// Open the specified app's store in the Steam overlay, and add it to the basket at the same time, and show the store page - use this app's store if none specified
+  if(this_appid == 0) {
+    this_appid = appid;
+  }
+  if(this_appid == 0) {
+    return;
+  }
+  api_friends->ActivateGameOverlayToStore(this_appid, k_EOverlayToStoreFlag_AddToCartAndShow);
 }
 
 void steamstorm::set_achievement(std::string const &achievementname) const {
