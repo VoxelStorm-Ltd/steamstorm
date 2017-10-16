@@ -17,6 +17,7 @@
 #include <steam/isteammusic.h>
 //#include <steam/isteammusicremote.h>
 #include <steam/isteamnetworking.h>
+#include <steam/isteamparentalsettings.h>
 #include <steam/isteamremotestorage.h>
 #include <steam/isteamscreenshots.h>
 #include <steam/isteamugc.h>
