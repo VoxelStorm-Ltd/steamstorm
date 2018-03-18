@@ -15,7 +15,7 @@
 #include <chrono>
 #include <vector>
 #include <unordered_map>
-#include <experimental/optional>
+#include <optional>
 
 // our own declaration of the steam api version, because the api doesn't export one
 #define STEAM_API_VERSION 140
@@ -154,7 +154,7 @@ public:
 
   // callback helpers
   template<typename T>
-  std::experimental::optional<T> call_sync(SteamAPICall_t callback, unsigned int timeout = 2'000) const;
+  std::optional<T> call_sync(SteamAPICall_t callback, unsigned int timeout = 2'000) const;
   bool wait_sync(SteamAPICall_t callback, unsigned int timeout = 2'000) const;
 
 private:
@@ -164,7 +164,7 @@ private:
 };
 
 template<typename T>
-std::experimental::optional<T> steamstorm::call_sync(SteamAPICall_t callback, unsigned int timeout) const {
+std::optional<T> steamstorm::call_sync(SteamAPICall_t callback, unsigned int timeout) const {
   /// Execute a callback synchronously and return the result, if it's available
   if(!enabled) {
     return {};                                                                  // exit silently if the api isn't initialised
