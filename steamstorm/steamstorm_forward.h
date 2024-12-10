@@ -1,6 +1,3 @@
-#ifndef STEAMSTORM_FORWARD_H_INCLUDED
-#define STEAMSTORM_FORWARD_H_INCLUDED
+#pragma once
 
 class steamstorm;
-
-#endif // STEAMSTORM_FORWARD_H_INCLUDED

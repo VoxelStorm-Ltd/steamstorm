@@ -1,5 +1,4 @@
-#ifndef STEAMSTORM_H_INCLUDED
-#define STEAMSTORM_H_INCLUDED
+#pragma once
 
 /// Steam API support library
 ///   Wrapping of commonly used Steam functions
@@ -191,6 +190,3 @@ std::optional<T> steamstorm::call_sync(SteamAPICall_t callback, unsigned int tim
   }
   return result;
 }
-
-
-#endif // STEAMSTORM_H_INCLUDED
