@@ -1,6 +1,6 @@
 #include "steamstorm.h"
-#include <thread>
 #include <fstream>
+#include <thread>
 //#include <steam/isteamapplist.h>
 #include <steam/isteamclient.h>
 #include <steam/isteamapps.h>
@@ -30,7 +30,9 @@
 #include "dynamic_load.h"
 #include "cast_if_required.h"
 
-// reproductions pf steam declarations from headers we don't want to include directly
+// reproductions of steam declarations from headers we don't want to include directly
+using namespace std::chrono_literals;
+
 S_API bool S_CALLTYPE SteamAPI_IsSteamRunning();                                // from steam_api.h
 S_API bool S_CALLTYPE SteamAPI_Init();                                          // from steam_api.h
 S_API void S_CALLTYPE SteamAPI_Shutdown();                                      // from steam_api.h
@@ -91,8 +93,8 @@ void steamstorm::init() {
       return;
     }
 
-    auto api_IsSteamRunning   = load_symbol<decltype(&SteamAPI_IsSteamRunning)>(lib, "SteamAPI_IsSteamRunning");
-    auto api_Init             = load_symbol<decltype(&SteamAPI_Init          )>(lib, "SteamAPI_Init");
+    auto api_IsSteamRunning{load_symbol<decltype(&SteamAPI_IsSteamRunning)>(lib, "SteamAPI_IsSteamRunning")};
+    auto api_Init{          load_symbol<decltype(&SteamAPI_Init          )>(lib, "SteamAPI_Init")};
     //auto api_Init             = load_symbol<decltype(&SteamAPI_Init          )>(lib, "SteamAPI_InitSafe");
 
     if(!api_IsSteamRunning()) {
@@ -137,15 +139,15 @@ void steamstorm::init() {
     #ifdef DEBUG_STEAMSTORM
       std::cout << "SteamStorm: DEBUG: Initialised Steam API, loading symbols..." << std::endl;
     #endif // DEBUG_STEAMSTORM
-    auto api_SteamClient                     = load_symbol<decltype(&SteamClient                             )>(lib, "SteamClient");
-    auto api_GetHSteamUser                   = load_symbol<decltype(&SteamAPI_GetHSteamUser                  )>(lib, "SteamAPI_GetHSteamUser");
-    auto api_GetHSteamPipe                   = load_symbol<decltype(&SteamAPI_GetHSteamPipe                  )>(lib, "SteamAPI_GetHSteamPipe");
-    auto api_ISteamClient_GetISteamUtils     = load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUtils    )>(lib, "SteamAPI_ISteamClient_GetISteamUtils");
-    auto api_ISteamClient_GetISteamUser      = load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUser     )>(lib, "SteamAPI_ISteamClient_GetISteamUser");
-    auto api_ISteamClient_GetISteamApps      = load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamApps     )>(lib, "SteamAPI_ISteamClient_GetISteamApps");
-    auto api_ISteamClient_GetISteamFriends   = load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamFriends  )>(lib, "SteamAPI_ISteamClient_GetISteamFriends");
-    auto api_ISteamClient_GetISteamUserStats = load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUserStats)>(lib, "SteamAPI_ISteamClient_GetISteamUserStats");
-    auto api_ISteamUser_GetSteamID           = load_symbol<decltype(&SteamAPI_ISteamUser_GetSteamID          )>(lib, "SteamAPI_ISteamUser_GetSteamID");
+    auto api_SteamClient{                    load_symbol<decltype(&SteamClient                             )>(lib, "SteamClient")};
+    auto api_GetHSteamUser{                  load_symbol<decltype(&SteamAPI_GetHSteamUser                  )>(lib, "SteamAPI_GetHSteamUser")};
+    auto api_GetHSteamPipe{                  load_symbol<decltype(&SteamAPI_GetHSteamPipe                  )>(lib, "SteamAPI_GetHSteamPipe")};
+    auto api_ISteamClient_GetISteamUtils{    load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUtils    )>(lib, "SteamAPI_ISteamClient_GetISteamUtils")};
+    auto api_ISteamClient_GetISteamUser{     load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUser     )>(lib, "SteamAPI_ISteamClient_GetISteamUser")};
+    auto api_ISteamClient_GetISteamApps{     load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamApps     )>(lib, "SteamAPI_ISteamClient_GetISteamApps")};
+    auto api_ISteamClient_GetISteamFriends{  load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamFriends  )>(lib, "SteamAPI_ISteamClient_GetISteamFriends")};
+    auto api_ISteamClient_GetISteamUserStats{load_symbol<decltype(&SteamAPI_ISteamClient_GetISteamUserStats)>(lib, "SteamAPI_ISteamClient_GetISteamUserStats")};
+    auto api_ISteamUser_GetSteamID{          load_symbol<decltype(&SteamAPI_ISteamUser_GetSteamID          )>(lib, "SteamAPI_ISteamUser_GetSteamID")};
     //auto api_ISteamUtils_GetAPICallResult    = load_symbol<decltype(&SteamAPI_ISteamUtils_GetAPICallResult   )>(lib, "SteamAPI_ISteamUtils_GetAPICallResult");
     #ifdef DEBUG_STEAMSTORM
       std::cout << "SteamStorm: DEBUG: Loaded all symbols." << std::endl;
@@ -189,7 +191,7 @@ void steamstorm::init() {
     }
     enabled = true;                                                             // necessary to allow some following functions to work
     {
-      auto new_appid = api_utils->GetAppID();
+      auto new_appid{api_utils->GetAppID()};
       if(appid != 0 && appid != new_appid) {
         std::cout << "SteamStorm: WARNING: App ID declared as " << appid << " but Steam tells us it's " << new_appid << "!" << std::endl;
       }
@@ -277,11 +279,11 @@ void steamstorm::init() {
       default:
         break;
       }
-      unsigned int const achievements_available = api_userstats->GetNumAchievements();
-      unsigned int achievements_unlocked = 0;
+      unsigned int const achievements_available{api_userstats->GetNumAchievements()};
+      unsigned int achievements_unlocked{0};
       for(unsigned int i = 0; i != achievements_available; ++i) {
-        bool alreadyachieved = false;
-        uint32_t achievementtime = 0;
+        bool alreadyachieved{false};
+        uint32_t achievementtime{0};
         std::string const &achievement_name(api_userstats->GetAchievementName(i));
         api_userstats->GetAchievementAndUnlockTime(achievement_name.c_str(), &alreadyachieved, &achievementtime);
         #ifdef DEBUG_STEAMSTORM_ACHIEVEMENTS
@@ -299,7 +301,7 @@ void steamstorm::init() {
       }
       std::cout << "SteamStorm: DEBUG: Achievements:      " << achievements_unlocked << " / " << achievements_available << std::endl;
       {
-        auto result = call_sync<NumberOfCurrentPlayers_t>(api_userstats->GetNumberOfCurrentPlayers());
+        auto result{call_sync<NumberOfCurrentPlayers_t>(api_userstats->GetNumberOfCurrentPlayers())};
         if(result) {
           std::cout << "SteamStorm: DEBUG: Players online:    " << result->m_cPlayers << std::endl;
         }
@@ -321,7 +323,7 @@ void steamstorm::shutdown() {
   if(lib && enabled) {
     std::cout << "SteamStorm: Shutting down." << std::endl;
     try {
-      auto api_Shutdown = load_symbol<decltype(&SteamAPI_Shutdown)>(lib, "SteamAPI_Shutdown");
+      auto api_Shutdown{load_symbol<decltype(&SteamAPI_Shutdown)>(lib, "SteamAPI_Shutdown")};
       if(api_Shutdown) {
         api_Shutdown();
       }
@@ -363,8 +365,8 @@ bool steamstorm::get_achievement(std::string const &achievementname) const {
   if(!enabled) {
     return false;                                                               // exit silently if the api isn't initialised
   }
-  bool alreadyachieved = false;
-  uint32_t achievementtime = 0;
+  bool alreadyachieved{false};
+  uint32_t achievementtime{0};
   api_userstats->GetAchievementAndUnlockTime(achievementname.c_str(), &alreadyachieved, &achievementtime);
   #ifdef DEBUG_STEAMSTORM
     if(alreadyachieved) {
@@ -557,7 +559,7 @@ void steamstorm::set_achievement(std::string const &achievementname) const {
   if(get_achievement(achievementname)) {
     return;
   }
-  bool const result = api_userstats->SetAchievement(achievementname.c_str());
+  bool const result{api_userstats->SetAchievement(achievementname.c_str())};
   if(!result) {
     /// If the call failed then either Steam is not initialized or you still haven't processed the callback from the inital call to RequestStats().
     /// You can't set any achievements until that callback has been received.
@@ -580,8 +582,8 @@ T steamstorm::get_stat(std::string const &statname) const {
   #ifdef DEBUG_STEAMSTORM
     std::cout << "SteamStorm: DEBUG: Getting statistic \"" << statname << " (" << typeid(T).name() << ")" << std::endl;
   #endif // DEBUG_STEAMSTORM
-  T newstat = 0;
-  bool success = api_userstats->GetStat(statname.c_str(), &newstat);
+  T newstat{};
+  bool success{api_userstats->GetStat(statname.c_str(), &newstat)};
   if(!success) {
     std::cout << "SteamStorm: ERROR: Could not get statistic \"" << statname << " (" << typeid(T).name() << ")" << std::endl;
     return 0;
@@ -599,7 +601,7 @@ void steamstorm::set_stat(std::string const &statname,
   #ifdef DEBUG_STEAMSTORM
     std::cout << "SteamStorm: DEBUG: Setting statistic \"" << statname << "\" to " << statvalue << " (" << typeid(T).name() << ")" << std::endl;
   #endif // DEBUG_STEAMSTORM
-  bool success = api_userstats->SetStat(statname.c_str(), statvalue);
+  bool success{api_userstats->SetStat(statname.c_str(), statvalue)};
   if(!success) {
     std::cout << "SteamStorm: ERROR: Could not set statistic \"" << statname << "\" to " << statvalue << " (" << typeid(T).name() << ")" << std::endl;
     return;
@@ -613,8 +615,8 @@ void steamstorm::add_stat(std::string const &statname,
   if(!enabled) {
     return;                                                                     // exit silently if the api isn't initialised
   }
-  T old_stat = 0;
-  bool success = api_userstats->GetStat(statname.c_str(), &old_stat);
+  T old_stat{};
+  bool success{api_userstats->GetStat(statname.c_str(), &old_stat)};
   if(!success) {
     std::cout << "SteamStorm: ERROR: Could not adjust statistic \"" << statname << "\" by " << statvalue << " (" << typeid(T).name() << ")" << std::endl;
     return;
@@ -682,7 +684,7 @@ uint64_t steamstorm::load_leaderboard(std::string const &name) {
   if(!enabled) {
     return 0;                                                                   // exit silently if the api isn't initialised
   }
-  auto result = call_sync<LeaderboardFindResult_t>(api_userstats->FindLeaderboard(name.c_str()));
+  auto result{call_sync<LeaderboardFindResult_t>(api_userstats->FindLeaderboard(name.c_str()))};
   if(!result) {
     std::cout << "SteamStorm: ERROR: No result when loading leaderboard named \"" << name << "\"." << std::endl;
     return 0;
@@ -711,7 +713,7 @@ void steamstorm::set_leaderboard_score(std::string const &name,
   #ifdef DEBUG_STEAMSTORM
     std::cout << "SteamStorm: DEBUG: Leaderboard \"" << name << "\" setting score " << score << std::endl;
   #endif // DEBUG_STEAMSTORM
-  uint64_t leaderboard_id = leaderboards[name];
+  uint64_t leaderboard_id{leaderboards[name]};
   if(leaderboard_id == 0) {
     #ifdef DEBUG_STEAMSTORM
       std::cout << "SteamStorm: DEBUG: Leaderboard \"" << name << "\" not loaded, loading now." << std::endl;
@@ -722,13 +724,13 @@ void steamstorm::set_leaderboard_score(std::string const &name,
       return;
     }
   }
-  auto result = call_sync<LeaderboardScoreUploaded_t>(api_userstats->UploadLeaderboardScore(
+  auto result{call_sync<LeaderboardScoreUploaded_t>(api_userstats->UploadLeaderboardScore(
     leaderboard_id,
     k_ELeaderboardUploadScoreMethodKeepBest,
     score,
     score_details.data(),
     cast_if_required<int>(score_details.size())                                 // what kind of idiot uses a signed "int" for a size type...
-  ), 2'000);
+  ), 2'000)};
   if(!result) {
     std::cout << "SteamStorm: ERROR: No result when uploading to leaderboard \"" << name << "\"." << std::endl;
     return;
@@ -753,11 +755,10 @@ bool steamstorm::wait_sync(SteamAPICall_t callback, unsigned int timeout) const 
   #endif // DEBUG_STEAMSTORM_CALLBACKS
   // block synchronously until we've got a completion or we hit timeout
   std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> time_next_check(std::chrono::high_resolution_clock::now());
-  unsigned int constexpr const timestep_ms = 50;                                // milliseconds, can tweak this for best performance
-  auto constexpr const timestep = std::chrono::milliseconds(timestep_ms);
-  bool got_result = false;
+  auto constexpr timestep{50ms};                                                // can tweak this for best performance
+  bool got_result{false};
   for(unsigned int i = 0; i < timeout; i += timestep_ms) {
-    bool callback_failed = false;
+    bool callback_failed{false};
     if(api_utils->IsAPICallCompleted(callback, &callback_failed)) {
       #ifdef DEBUG_STEAMSTORM_CALLBACKS
         std::cout << "SteamStorm: DEBUG: API call completed after " << i << "ms" << std::endl;

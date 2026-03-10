@@ -78,35 +78,35 @@ using HSteamUser = int32_t;
 
 class steamstorm {
 private:
-  void *lib = nullptr;                                                          // pointer to the dynamically loaded steam library
+  void *lib{nullptr};                                                           // pointer to the dynamically loaded steam library
 
   std::unordered_map<std::string, uint64_t> leaderboards;                       // SteamLeaderboard_t is uint64_t here
 
 public:
-  HSteamUser client_user = 0;                                                   // the steam client user id
-  HSteamPipe client_pipe = 0;                                                   // the steam client pipe id
+  HSteamUser client_user{0};                                                    // the steam client user id
+  HSteamPipe client_pipe{0};                                                    // the steam client pipe id
 
   // versioned steam api module pointers
-  ISteamClient    *api_client    = nullptr;
-  ISteamUtils     *api_utils     = nullptr;
-  ISteamUser      *api_user      = nullptr;
-  ISteamApps      *api_apps      = nullptr;
-  ISteamFriends   *api_friends   = nullptr;
-  ISteamUserStats *api_userstats = nullptr;
+  ISteamClient    *api_client{nullptr};
+  ISteamUtils     *api_utils{nullptr};
+  ISteamUser      *api_user{nullptr};
+  ISteamApps      *api_apps{nullptr};
+  ISteamFriends   *api_friends{nullptr};
+  ISteamUserStats *api_userstats{nullptr};
 
   // flat api cached int pointer conversions of the above objects
-  intptr_t api_flat_client    = 0;
-  intptr_t api_flat_utils     = 0;
-  intptr_t api_flat_user      = 0;
-  intptr_t api_flat_apps      = 0;
-  intptr_t api_flat_friends   = 0;
-  intptr_t api_flat_userstats = 0;
+  intptr_t api_flat_client{0};
+  intptr_t api_flat_utils{0};
+  intptr_t api_flat_user{0};
+  intptr_t api_flat_apps{0};
+  intptr_t api_flat_friends{0};
+  intptr_t api_flat_userstats{0};
 
   CSteamID api_user_id;                                                         // our own generated steam user - we can't fetch this, so we make one locally
 
-  bool enabled = false;                                                         // whether our steam connection is operational
-  uint32_t appid = 0;                                                           // what Steam tells us this app's ID is
-  uint64_t user_id = 0;                                                         // internal Steam user id
+  bool enabled{false};                                                          // whether our steam connection is operational
+  uint32_t appid{0};                                                            // what Steam tells us this app's ID is
+  uint64_t user_id{0};                                                          // internal Steam user id
   std::string username;                                                         // the currently logged in steam user's name
 
   steamstorm(uint32_t appid = 0);
@@ -179,8 +179,8 @@ std::optional<T> steamstorm::call_sync(SteamAPICall_t callback, unsigned int tim
   }
 
   T result;
-  bool callback_failed = false;
-  bool callback_result_userstats = get_api_call_result(callback, &result, sizeof(result), result.k_iCallback, callback_failed);
+  bool callback_failed{false};
+  bool callback_result_userstats{get_api_call_result(callback, &result, sizeof(result), result.k_iCallback, callback_failed)};
   if(!callback_result_userstats) {
     return {};
   }
