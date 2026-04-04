@@ -756,6 +756,7 @@ bool steamstorm::wait_sync(SteamAPICall_t callback, unsigned int timeout) const 
   // block synchronously until we've got a completion or we hit timeout
   std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<double>> time_next_check(std::chrono::high_resolution_clock::now());
   auto constexpr timestep{50ms};                                                // can tweak this for best performance
+  auto constexpr timestep_ms{static_cast<unsigned int>(timestep.count())};      // integer milliseconds for loop counter
   bool got_result{false};
   for(unsigned int i = 0; i < timeout; i += timestep_ms) {
     bool callback_failed{false};
